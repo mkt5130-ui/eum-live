@@ -13,3 +13,8 @@ GitHub 저장소의 Add file → Upload files에서 이 압축파일을 풀어 �
 - 참가자: https://mkt5130-ui.github.io/eum-live/
 - LIVE: https://mkt5130-ui.github.io/eum-live/live.html
 - 관리자: https://mkt5130-ui.github.io/eum-live/admin.html
+
+
+v2 추가 기능
+- ③ 오늘 참여하신 소감을 자유롭게 남겨주세요
+- 참여 소감은 질문/공감 순위와 분리하여 관리자 화면에서만 확인

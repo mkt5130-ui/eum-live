@@ -1,0 +1,8 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>인천e음 실시간 참여</title><link rel="stylesheet" href="./styles.css"></head>
+<body><div class="wrap"><header class="top"><div class="brand"><span class="badge">LIVE</span><h1>인천e음, 여러분의 생각을 들려주세요</h1><p>키워드와 질문을 남기고, 다른 참가자의 질문에 공감해주세요.</p></div></header>
+<div id="closed" class="notice hidden">현재 질문 접수가 마감되었습니다. 기존 질문과 워드클라우드는 계속 볼 수 있습니다.</div>
+<main class="grid"><section class="card"><h2>① 인천e음 하면 떠오르는 단어는?</h2><p class="help">최대 3개 · 쉼표(,)로 구분</p><input id="keywords" placeholder="예: 캐시백, 지역경제, 소상공인">
+<h2 style="margin-top:22px">② 무엇이 궁금한가요?</h2><p class="help">정책, 캐시백, 가맹점, 지역경제 효과 등 자유롭게 질문해주세요.</p><textarea id="question" rows="5" maxlength="250" placeholder="예: 캐시백 정책이 앞으로도 계속 유지될 수 있나요?"></textarea>
+<label><input id="named" type="checkbox" style="width:auto"> 이름/소속 표시</label><input id="author" class="hidden" maxlength="30" placeholder="예: 인천시민 김OO"><div class="row" style="margin-top:16px"><button id="submit" class="primary">의견 보내기</button><span id="msg" class="help"></span></div></section>
+<section class="card"><div class="between"><div><h2>실시간 워드클라우드</h2><p class="help">많이 언급된 단어일수록 크게 보입니다.</p></div><span id="count" class="badge">0개</span></div><div id="cloud" class="cloud"></div></section>
+<section class="card full"><div class="between"><div><h2>지금 가장 궁금한 질문</h2><p class="help">나도 궁금한 질문이라면 ♡ 공감해주세요.</p></div><select id="sort" style="width:auto"><option value="popular">공감순</option><option value="latest">최신순</option></select></div><div id="questions" class="q-list"></div></section></main><footer>인천e음 실시간 참여 보드</footer></div><script type="module" src="./participant.js"></script></body></html>

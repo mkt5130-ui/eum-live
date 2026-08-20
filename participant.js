@@ -2,7 +2,7 @@ import {sb,deviceId,esc,loadAll,keywordCounts,cloudHTML,subscribe,formatTime} fr
 const $=s=>document.querySelector(s);let state={};const did=deviceId();
 $('#named').onchange=e=>$('#author').classList.toggle('hidden',!e.target.checked);$('#sort').onchange=renderQuestions;
 async function refresh(){try{state=await loadAll();render()}catch(e){console.error(e);$('#msg').textContent='연결 상태를 확인해주세요.';$('#msg').className='err'}}
-function render(){const entries=keywordCounts(state.keywords);$('#cloud').innerHTML=cloudHTML(entries);$('#count').textContent=`${state.keywords.length}개 의견`;const open=!!state.config?.is_open;$('#closed').classList.toggle('hidden',open);$('#submit').disabled=!open;renderQuestions()}
+function render(){const entries=keywordCounts(state.keywords);$('#cloud').innerHTML=cloudHTML(entries);$('#count').textContent=`${state.keywords.length}개 의견`;const open=!!state.config?.is_open;$('#closed').classList.toggle('hidden',open);$('#submit').disabled=!open;renderQuestions();renderFeedback()}
 function renderQuestions(){let qs=[...(state.questions||[])];qs.sort($('#sort').value==='latest'?(a,b)=>new Date(b.created_at)-new Date(a.created_at):(a,b)=>(b.like_count-a.like_count)||new Date(b.created_at)-new Date(a.created_at));
 if(!qs.length){$('#questions').innerHTML='<div class="help">아직 질문이 없습니다. 첫 질문을 남겨주세요.</div>';return}
 $('#questions').innerHTML=qs.map((q,i)=>`<article class="q"><div class="between"><div>${i<3&&$('#sort').value==='popular'?`<span class="badge">TOP ${i+1}</span>`:''}${q.is_pinned?'<span class="badge">진행자 선택</span>':''}</div><span class="meta">${q.is_answered?'답변 완료':''}</span></div><p>${esc(q.body)}</p><div class="between"><span class="meta">${esc(q.author)} · ${formatTime(q.created_at)}</span><button class="like" data-id="${q.id}">♡ 공감 ${q.like_count}</button></div></article>`).join('');
@@ -14,3 +14,9 @@ if(q){const author=$('#named').checked?($('#author').value.trim()||'참가자'):
 if(fb){const {error}=await sb.from('eum_feedback').insert({body:fb,device_id:did});if(error&&error.code!=='23505')throw error}
 $('#keywords').value='';$('#question').value='';$('#feedback').value='';$('#msg').textContent='실시간으로 반영되었습니다.';$('#msg').className='ok'}catch(e){console.error(e);const t=String(e.message||e);$('#msg').textContent=t.includes('keyword_limit_reached')?'이 기기에서는 키워드를 최대 3개까지 등록할 수 있습니다.':t.includes('question_limit_reached')?'질문 등록 횟수 제한에 도달했습니다.':'등록 중 오류가 발생했습니다.';$('#msg').className='err'}finally{$('#submit').disabled=!state.config?.is_open;refresh()}};
 await refresh();subscribe(()=>refresh());
+function renderFeedback(){
+  const items=state.feedback||[];
+  const c=document.querySelector('#feedbackCount'); if(c)c.textContent=`${items.length}건`;
+  const el=document.querySelector('#feedbackList'); if(!el)return;
+  el.innerHTML=items.length?items.map(x=>`<article class="q"><p>${esc(x.body)}</p><span class="meta">${formatTime(x.created_at)}</span></article>`).join(''):'<div class="help">아직 등록된 참여 소감이 없습니다.</div>';
+}

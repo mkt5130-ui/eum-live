@@ -12,13 +12,14 @@ export function deviceId(){
 }
 export function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 export async function loadAll(){
-  const [cfg,kw,qs]=await Promise.all([
+  const [cfg,kw,qs,fb]=await Promise.all([
     sb.from('eum_event_config').select('*').eq('id',1).single(),
     sb.from('eum_keywords').select('id,word,created_at'),
-    sb.from('eum_questions').select('id,body,author,is_pinned,is_answered,is_hidden,like_count,created_at').eq('is_hidden',false)
+    sb.from('eum_questions').select('id,body,author,is_pinned,is_answered,is_hidden,like_count,created_at').eq('is_hidden',false),
+    sb.from('eum_feedback').select('id,body,created_at').order('created_at',{ascending:false})
   ]);
-  if(cfg.error)throw cfg.error;if(kw.error)throw kw.error;if(qs.error)throw qs.error;
-  return {config:cfg.data,keywords:kw.data||[],questions:qs.data||[]};
+  if(cfg.error)throw cfg.error;if(kw.error)throw kw.error;if(qs.error)throw qs.error;if(fb.error)throw fb.error;
+  return {config:cfg.data,keywords:kw.data||[],questions:qs.data||[],feedback:fb.data||[]};
 }
 export function keywordCounts(rows){const m={};for(const r of rows){const w=(r.word||'').trim();if(w)m[w]=(m[w]||0)+1}return Object.entries(m).sort((a,b)=>b[1]-a[1]);}
 export function cloudHTML(entries,large=false){
